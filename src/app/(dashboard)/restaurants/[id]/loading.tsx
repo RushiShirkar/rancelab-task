@@ -19,32 +19,32 @@ export default function RestaurantDetailLoading() {
                     <ArrowLeft className="h-4 w-4" />
                     Back to Restaurants
                 </Button>
-                <Skeleton className="h-9 w-64 mb-2" />
-                <Skeleton className="h-5 w-96" />
+                <Skeleton className="h-9 w-48 md:w-64 mb-2" />
+                <Skeleton className="h-5 w-full md:w-96" />
             </div>
 
             {/* Categories Skeleton */}
             <div className="flex flex-wrap gap-2">
                 {Array.from({ length: 4 }).map((_, i) => (
-                    <Skeleton key={i} className="h-6 w-24 rounded-full" />
+                    <Skeleton key={i} className="h-6 w-20 md:w-24 rounded-full" />
                 ))}
                 <Skeleton className="h-6 w-8 rounded-full" />
             </div>
 
             {/* Dishes Table Skeleton */}
             <div className="rounded-md border bg-card">
-                <div className="p-4 border-b flex justify-between items-center">
-                    <Skeleton className="h-7 w-32" />
-                    <Skeleton className="h-9 w-24" />
+                <div className="p-4 border-b flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
+                    <Skeleton className="h-7 w-24 md:w-32" />
+                    <Skeleton className="h-9 w-full md:w-24" />
                 </div>
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Image</TableHead>
-                            <TableHead>Name</TableHead>
-                            <TableHead>Category</TableHead>
-                            <TableHead>Price</TableHead>
-                            <TableHead className="text-right">Actions</TableHead>
+                            <TableHead className="hidden md:table-cell">Image</TableHead>
+                            <TableHead className="hidden md:table-cell">Name</TableHead>
+                            <TableHead className="hidden md:table-cell">Category</TableHead>
+                            <TableHead className="hidden md:table-cell">Price</TableHead>
+                            <TableHead className="hidden md:table-cell text-right">Actions</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -55,18 +55,18 @@ export default function RestaurantDetailLoading() {
                                 </TableCell>
                                 <TableCell>
                                     <div className="space-y-1">
-                                        <Skeleton className="h-5 w-32" />
-                                        <Skeleton className="h-4 w-48" />
+                                        <Skeleton className="h-5 w-28 md:w-32" />
+                                        <Skeleton className="h-4 w-36 md:w-48" />
                                     </div>
                                 </TableCell>
-                                <TableCell>
+                                <TableCell className="hidden md:table-cell">
                                     <div className="flex gap-1">
-                                        <Skeleton className="h-5 w-16 rounded-full" />
-                                        <Skeleton className="h-5 w-16 rounded-full" />
+                                        <Skeleton className="h-5 w-14 md:w-16 rounded-full" />
+                                        <Skeleton className="h-5 w-14 md:w-16 rounded-full" />
                                     </div>
                                 </TableCell>
-                                <TableCell>
-                                    <Skeleton className="h-5 w-16" />
+                                <TableCell className="hidden md:table-cell">
+                                    <Skeleton className="h-5 w-12 md:w-16" />
                                 </TableCell>
                                 <TableCell className="text-right">
                                     <div className="flex justify-end gap-2">

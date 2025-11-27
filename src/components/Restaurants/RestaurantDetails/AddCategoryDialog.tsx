@@ -14,9 +14,10 @@ interface AddCategoryDialogProps {
     open: boolean
     onOpenChange: (open: boolean) => void
     onAdd: (name: string) => void
+    isPending: boolean
 }
 
-const AddCategoryDialog = ({ open, onOpenChange, onAdd }: AddCategoryDialogProps) => {
+const AddCategoryDialog = ({ open, onOpenChange, onAdd, isPending }: AddCategoryDialogProps) => {
     const [categoryName, setCategoryName] = React.useState("")
     const [error, setError] = React.useState("")
 
@@ -31,12 +32,20 @@ const AddCategoryDialog = ({ open, onOpenChange, onAdd }: AddCategoryDialogProps
         onAdd(categoryName)
         setCategoryName("")
         setError("")
-        onOpenChange(false)
     }
+
+    // Close dialog when isPending becomes false after being true
+    const prevIsPendingRef = React.useRef(isPending)
+    React.useEffect(() => {
+        if (prevIsPendingRef.current && !isPending && !categoryName) {
+            onOpenChange(false)
+        }
+        prevIsPendingRef.current = isPending
+    }, [isPending, categoryName, onOpenChange])
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent onClose={() => onOpenChange(false)}>
+            <DialogContent onClose={() => !isPending && onOpenChange(false)}>
                 <DialogHeader>
                     <DialogTitle>Add New Category</DialogTitle>
                     <DialogDescription>
@@ -62,10 +71,13 @@ const AddCategoryDialog = ({ open, onOpenChange, onAdd }: AddCategoryDialogProps
                             type="button"
                             variant="ghost"
                             onClick={() => onOpenChange(false)}
+                            disabled={isPending}
                         >
                             Cancel
                         </Button>
-                        <Button type="submit">Add Category</Button>
+                        <Button type="submit" disabled={isPending}>
+                            {isPending ? "Adding..." : "Add Category"}
+                        </Button>
                     </DialogFooter>
                 </form>
             </DialogContent>

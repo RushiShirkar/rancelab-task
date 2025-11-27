@@ -36,9 +36,10 @@ interface AddDishDialogProps {
     onOpenChange: (open: boolean) => void
     categories: Category[]
     onAdd: (dish: DishFormData) => void
+    isPending: boolean
 }
 
-const AddDishDialog = ({ open, onOpenChange, categories, onAdd }: AddDishDialogProps) => {
+const AddDishDialog = ({ open, onOpenChange, categories, onAdd, isPending }: AddDishDialogProps) => {
     const [dishForm, setDishForm] = React.useState<DishFormData>({
         name: "",
         description: "",
@@ -129,7 +130,6 @@ const AddDishDialog = ({ open, onOpenChange, categories, onAdd }: AddDishDialogP
         setSelectedFile(null)
         setImagePreview(null)
         setUploadError(null)
-        onOpenChange(false)
     }
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -153,6 +153,15 @@ const AddDishDialog = ({ open, onOpenChange, categories, onAdd }: AddDishDialogP
         setUploadError(null)
     }
 
+    // Close dialog when isPending becomes false after being true
+    const prevIsPendingRef = React.useRef(isPending)
+    React.useEffect(() => {
+        if (prevIsPendingRef.current && !isPending && !dishForm.name) {
+            onOpenChange(false)
+        }
+        prevIsPendingRef.current = isPending
+    }, [isPending, dishForm.name, onOpenChange])
+
     const categoryOptions = categories.map(cat => ({
         value: cat.id,
         label: cat.name,
@@ -160,7 +169,7 @@ const AddDishDialog = ({ open, onOpenChange, categories, onAdd }: AddDishDialogP
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
-            <DialogContent onClose={() => onOpenChange(false)} className="w-full md:w-[400px]">
+            <DialogContent onClose={() => !isPending && onOpenChange(false)} className="w-full md:w-[400px]">
                 <DialogHeader>
                     <DialogTitle>Add New Dish</DialogTitle>
                     <DialogDescription>
@@ -288,11 +297,12 @@ const AddDishDialog = ({ open, onOpenChange, categories, onAdd }: AddDishDialogP
                             type="button"
                             variant="ghost"
                             onClick={() => onOpenChange(false)}
+                            disabled={isUploading || isPending}
                         >
                             Cancel
                         </Button>
-                        <Button type="submit" disabled={isUploading}>
-                            {isUploading ? "Uploading..." : "Add Dish"}
+                        <Button type="submit" disabled={isUploading || isPending}>
+                            {isUploading ? "Uploading..." : isPending ? "Adding..." : "Add Dish"}
                         </Button>
                     </DialogFooter>
                 </form>

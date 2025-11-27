@@ -50,7 +50,6 @@ const RestaurantDetailClient = ({ restaurantData }: RestaurantDetailClientProps)
     // Category dialog handlers
     const onAddCategory = (name: string) => {
         handleAddCategory(name);
-        setIsCategoryDialogOpen(false);
     };
     const onDeleteCategory = (id: string) => {
         setCategoryToDelete(id);
@@ -66,7 +65,6 @@ const RestaurantDetailClient = ({ restaurantData }: RestaurantDetailClientProps)
     // Dish dialog handlers
     const onAddDish = (dishData: { name: string; description: string; image: string; spiceLevel: string; categoryIds: string[] }) => {
         handleAddDish(dishData);
-        setIsDishDialogOpen(false);
     };
     const onDeleteDish = (id: string) => {
         setDishToDelete(id);
@@ -114,9 +112,9 @@ const RestaurantDetailClient = ({ restaurantData }: RestaurantDetailClientProps)
             />
 
             {/* Dialogs */}
-            <AddCategoryDialog open={isCategoryDialogOpen} onOpenChange={setIsCategoryDialogOpen} onAdd={onAddCategory} />
+            <AddCategoryDialog open={isCategoryDialogOpen} onOpenChange={setIsCategoryDialogOpen} onAdd={onAddCategory} isPending={isPending} />
             <DeleteCategoryDialog open={deleteCategoryDialogOpen} onOpenChange={setDeleteCategoryDialogOpen} isPending={isPending} onConfirm={confirmDeleteCategory} />
-            <AddDishDialog open={isDishDialogOpen} onOpenChange={setIsDishDialogOpen} categories={categories} onAdd={onAddDish} />
+            <AddDishDialog open={isDishDialogOpen} onOpenChange={setIsDishDialogOpen} categories={categories} onAdd={onAddDish} isPending={isPending} />
             <DeleteDishDialog open={deleteDishDialogOpen} onOpenChange={setDeleteDishDialogOpen} isPending={isPending} onConfirm={confirmDeleteDish} />
         </div>
     );

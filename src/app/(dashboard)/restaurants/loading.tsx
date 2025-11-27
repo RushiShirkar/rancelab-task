@@ -14,12 +14,12 @@ export default function Loading() {
     return (
         <div className="space-y-6">
             {/* Page Header Skeleton */}
-            <header className="flex items-start md:items-center justify-between">
-                <div>
-                    <Skeleton className="h-9 w-48 mb-2" />
-                    <Skeleton className="h-5 w-64" />
+            <header className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
+                <div className="w-full md:w-auto">
+                    <Skeleton className="h-9 w-40 md:w-48 mb-2" />
+                    <Skeleton className="h-5 w-48 md:w-64" />
                 </div>
-                <Button disabled className="gap-2 mt-3 opacity-50">
+                <Button disabled className="gap-2 opacity-50 w-full md:w-auto">
                     <Plus className="h-4 w-4" />
                     Add
                 </Button>
@@ -30,19 +30,19 @@ export default function Loading() {
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Name</TableHead>
-                            <TableHead>Location</TableHead>
-                            <TableHead className="text-right">Actions</TableHead>
+                            <TableHead className="hidden md:table-cell">Name</TableHead>
+                            <TableHead className="hidden md:table-cell">Location</TableHead>
+                            <TableHead className="hidden md:table-cell text-right">Actions</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {Array.from({ length: 5 }).map((_, i) => (
                             <TableRow key={i}>
                                 <TableCell>
-                                    <Skeleton className="h-5 w-40" />
+                                    <Skeleton className="h-5 w-32 md:w-40" />
                                 </TableCell>
-                                <TableCell>
-                                    <Skeleton className="h-5 w-64" />
+                                <TableCell className="hidden md:table-cell">
+                                    <Skeleton className="h-5 w-48 md:w-64" />
                                 </TableCell>
                                 <TableCell className="text-right">
                                     <div className="flex justify-end gap-2">
