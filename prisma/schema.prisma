@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  fullName  String
+  country   String   // Should store valid country name
+  createdAt DateTime @default(now())
+
+  restaurants        Restaurant[]
+  verificationCodes  VerificationCode[]
+  sessions           Session[]
+}
+
+model VerificationCode {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  code      String   // 4–6 digit email OTP code
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([code])
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String
+  expiresAt DateTime
+  token     String   @unique @default(cuid()) // session lookup token
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([token])
+}
+
+model Restaurant {
+  id        String   @id @default(cuid())
+  owner     User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId   String
+  name      String
+  location  String
+  slug      String   @unique  // Used for QR & shared link
+  createdAt DateTime @default(now())
+
+  categories  Category[]
+  dishes      Dish[]
+
+  @@index([ownerId])
+  @@index([slug])
+}
+
+model Category {
+  id           String     @id @default(cuid())
+  name         String
+  type         String     @default("main-course") // recommended, starter, desserts, main-course, drinks
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  restaurantId String
+  createdAt    DateTime   @default(now())
+
+  dishes       Dish[]     @relation("DishCategories")
+
+  @@index([restaurantId])
+  @@unique([restaurantId, name]) // Prevent duplicate category names inside same restaurant
+}
+
+model Dish {
+  id           String     @id @default(cuid())
+  name         String
+  description  String?
+  imageUrl     String?
+  price        Float      @default(0)
+  isVegetarian Boolean    @default(false)
+  spiceLevel   Int?       // Optional (ex: 1–5)
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  restaurantId String
+  createdAt    DateTime   @default(now())
+
+  categories   Category[] @relation("DishCategories")
+
+  @@index([restaurantId])
+  @@unique([restaurantId, name]) // Prevent duplicate dish names inside same restaurant
+}
