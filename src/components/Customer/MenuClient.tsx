@@ -82,30 +82,14 @@ const MenuClient = ({ restaurant, categories, items }: MenuClientProps) => {
         setIsNavOpen(false)
     }
 
-    // Get current category name for header
-    const currentCategoryName = React.useMemo(() => {
-        const category = categories.find((c) => c.id === currentCategory)
-        return category?.name || ""
-    }, [currentCategory, categories])
-
-    // Get current category type label
-    const currentCategoryTypeLabel = React.useMemo(() => {
-        const category = categories.find((c) => c.id === currentCategory)
-        if (!category) return ""
-        const group = categoryGroups.find((g) => g.type === category.type)
-        return group?.label || ""
-    }, [currentCategory, categories, categoryGroups])
-
     return (
         <>
             <MenuHeader
                 restaurantName={restaurant.name}
                 restaurantLocation={restaurant.location}
-                currentCategory={currentCategoryName}
-                currentCategoryType={currentCategoryTypeLabel}
             />
 
-            <div>
+            <div className="pb-20">
                 {categoryGroups.map((group) =>
                     group.categories.map((category, index) => {
                         const categoryItems = items.filter((item) =>
@@ -122,9 +106,18 @@ const MenuClient = ({ restaurant, categories, items }: MenuClientProps) => {
                                 }}
                                 className={index < group.categories.length - 1 ? "pb-2" : "pb-2 border-b border-gray-100"}
                             >
-                                {categoryItems.map((item) => (
-                                    <DishCard key={item.id} item={item} />
-                                ))}
+                                {/* Sticky Category Header */}
+                                <div className="sticky top-[53px] z-30 bg-white py-3 px-4 shadow-sm border-b border-gray-100">
+                                    <h2 className="text-lg font-bold text-gray-800">
+                                        {category.name}
+                                    </h2>
+                                </div>
+
+                                <div className="pt-2">
+                                    {categoryItems.map((item) => (
+                                        <DishCard key={item.id} item={item} />
+                                    ))}
+                                </div>
                             </div>
                         )
                     })
@@ -140,6 +133,7 @@ const MenuClient = ({ restaurant, categories, items }: MenuClientProps) => {
                 currentCategoryId={currentCategory}
                 onCategoryClick={scrollToCategory}
                 getCategoryItemCount={getCategoryItemCount}
+                items={items}
             />
         </>
     )
