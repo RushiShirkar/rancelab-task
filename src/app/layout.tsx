@@ -3,6 +3,7 @@ import "./globals.css";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { AuthProvider } from "@/context/AuthContext";
 import { Toaster } from "@components/UI/Sonner";
+import { Analytics } from "@vercel/analytics/next";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -18,6 +19,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
           <AuthProvider>
             {children}
             <Toaster />
+            <Analytics />
           </AuthProvider>
         </body>
       </html>
